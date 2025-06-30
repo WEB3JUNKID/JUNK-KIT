@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Junk Kit - Sign Up / Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  body {
+    background: linear-gradient(135deg, #ff3c3c, #8b0000);
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+  }
+  .auth-box {
+    background: rgba(0,0,0,0.85);
+    border-radius: 20px;
+    padding: 30px 40px;
+    width: 380px;
+    box-shadow: 0 8px 25px rgba(255, 60, 60, 0.7);
+    text-align: center;
+  }
+  .logo {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+  }
+  h1 {
+    margin-bottom: 25px;
+    font-weight: 700;
+    font-size: 2.4rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px rgba(255, 60, 60, 0.8);
+  }
+  .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+  .tab {
+    flex: 1;
+    padding: 12px 0;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+  .tab.active {
+    border-color: #ff3c3c;
+    color: #ff3c3c;
+  }
+  .tab-content {
+    display: none;
+  }
+  .tab-content.active {
+    display: block;
+  }
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 14px 18px;
+    margin: 12px 0;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+    box-shadow: inset 0 0 8px rgba(255, 60, 60, 0.5);
+    background: #220000;
+    color: white;
+    transition: box-shadow 0.3s ease;
+  }
+  input[type="text"]:focus, input[type="password"]:focus {
+    box-shadow: inset 0 0 15px #ff3c3c;
+  }
+  label.remember {
+    font-weight: 500;
+    font-size: 14px;
+    text-align: left;
+    display: block;
+    margin-top: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+  label.remember input {
+    margin-right: 8px;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  button {
+    margin-top: 25px;
+    background: #ff3c3c;
+    border: none;
+    width: 100%;
+    padding: 15px 0;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+    box-shadow: 0 0 15px #ff3c3c;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #d62828;
+    box-shadow: 0 0 25px #d62828;
+  }
+  .error {
+    margin-top: 12px;
+    font-weight: 600;
+    color: #ff6b6b;
+    font-size: 14px;
+  }
+  .success {
+    margin-top: 12px;
+    font-weight: 600;
+    color: #a0ffa0;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="auth-box">
+  <!-- Logo -->
+  <svg class="logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" >
+    <defs>
+      <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#ff3c3c;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#8b0000;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    <rect width="120" height="120" fill="#000000" rx="20" ry="20"/>
+    <text x="20" y="85" font-family="Poppins, sans-serif" font-size="70" font-weight="900" fill="url(#grad1)">JK</text>
+    <line x1="70" y1="20" x2="90" y2="100" stroke="#ff3c3c" stroke-width="6" stroke-linecap="round" />
+  </svg>
+
+  <h1>Junk Kit</h1>
+
+  <div class="tabs">
+    <div class="tab active" id="tab-signin">Sign In</div>
+    <div class="tab" id="tab-signup">Sign Up</div>
+  </div>
+
+  <!-- Sign In Form -->
+  <div id="signin-content" class="tab-content active">
+    <input type="text" id="signin-username" placeholder="Username" autocomplete="username" />
+    <input type="password" id="signin-password" placeholder="Password" autocomplete="current-password" />
+    <label class="remember"><input type="checkbox" id="signin-remember" /> Remember me</label>
+    <button onclick="signin()">Sign In</button>
+    <p id="signin-error" class="error"></p>
+  </div>
+
+  <!-- Sign Up Form -->
+  <div id="signup-content" class="tab-content">
+    <input type="text" id="signup-username" placeholder="Choose a username" autocomplete="username" />
+    <input type="password" id="signup-password" placeholder="Choose a password" autocomplete="new-password" />
+    <button onclick="signup()">Sign Up</button>
+    <p id="signup-error" class="error"></p>
+    <p id="signup-success" class="success"></p>
+  </div>
+</div>
+
+<script>
+  // Tab switching
+  const tabSignin = document.getElementById('tab-signin');
+  const tabSignup = document.getElementById('tab-signup');
+  const signinContent = document.getElementById('signin-content');
+  const signupContent = document.getElementById('signup-content');
+
+  tabSignin.onclick = () => {
+    tabSignin.classList.add('active');
+    tabSignup.classList.remove('active');
+    signinContent.classList.add('active');
+    signupContent.classList.remove('active');
+    clearMessages();
+  };
+  tabSignup.onclick = () => {
+    tabSignup.classList.add('active');
+    tabSignin.classList.remove('active');
+    signupContent.classList.add('active');
+    signinContent.classList.remove('active');
+    clearMessages();
+  };
+
+  // Clear all error/success messages
+  function clearMessages(){
+    document.getElementById('signin-error').textContent = '';
+    document.getElementById('signup-error').textContent = '';
+    document.getElementById('signup-success').textContent = '';
+  }
+
+  // Helper: store users in localStorage as JSON object keyed by username
+  function getUsers() {
+    const users = localStorage.getItem('jk_users');
+    return users ? JSON.parse(users) : {};
+  }
+  function saveUsers(users) {
+    localStorage.setItem('jk_users', JSON.stringify(users));
+  }
+
+  // Signup logic
+  function signup() {
+    const username = document.getElementById('signup-username').value.trim();
+    const password = document.getElementById('signup-password').value;
+    const errorElem = document.getElementById('signup-error');
+    const successElem = document.getElementById('signup-success');
+    errorElem.textContent = '';
+    successElem.textContent = '';
+
+    if(username.length < 3) {
+      errorElem.textContent = 'Username must be at least 3 characters';
+      return;
+    }
+    if(password.length < 6) {
+      errorElem.textContent = 'Password must be at least 6 characters';
+      return;
+    }
+
+    const users = getUsers();
+    if(users[username]) {
+      errorElem.textContent = 'Username already exists, try another';
+      return;
+    }
+
+    // Save user
+    users[username] = { password: password };
+    saveUsers(users);
+
+    successElem.textContent = 'Account created! You can now sign in.';
+    // Clear inputs
+    document.getElementById('signup-username').value = '';
+    document.getElementById('signup-password').value = '';
+
+    // Switch to sign in tab after short delay
+    setTimeout(() => {
+      tabSignin.click();
+    }, 1500);
+  }
+
+  // Signin logic
+  function signin() {
+    const username = document.getElementById('signin-username').value.trim();
+    const password = document.getElementById('signin-password').value;
+    const remember = document.getElementById('signin-remember').checked;
+    const errorElem = document.getElementById('signin-error');
+    errorElem.textContent = '';
+
+    if(!username || !password) {
+      errorElem.textContent = 'Please enter username and password';
+      return;
+    }
+
+    const users = getUsers();
+    if(!users[username] || users[username].password !== password) {
+      errorElem.textContent = 'Invalid username or password!';
+      return;
+    }
+
+    // Login success
+    localStorage.setItem('loggedIn', 'true');
+    localStorage.setItem('username', username);
+
+    if(remember){
+      localStorage.setItem('jk_username', username);
+      localStorage.setItem('jk_password', password);
+    } else {
+      localStorage.removeItem('jk_username');
+      localStorage.removeItem('jk_password');
+    }
+
+    // Redirect to dashboard
+    window.location.href = 'dashboard.html';
+  }
+
+  // On load, pre-fill sign in fields if remembered
+  window.onload = () => {
+    const savedUser = localStorage.getItem('jk_username');
+    const savedPass = localStorage.getItem('jk_password');
+    if(savedUser && savedPass){
+      document.getElementById('signin-username').value = savedUser;
+      document.getElementById('signin-password').value = savedPass;
+      document.getElementById('signin-remember').checked = true;
+    }
+  }
+</script>
+
+</body>
+</html>
